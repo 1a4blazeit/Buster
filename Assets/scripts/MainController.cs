@@ -9,7 +9,7 @@ public class MainController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		player = CreateObject("prefabs/PlayerModel");
-		player.transform.position = new Vector2(0, 0);
+		player.transform.position = new Vector3(4.5f, 2, 0);
 	}
 	
 	// Update is called once per frame
