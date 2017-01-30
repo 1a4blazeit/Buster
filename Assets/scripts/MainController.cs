@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MainController : MonoBehaviour {
+	
+	GameObject player;
 
 	// Use this for initialization
 	void Start () {
-		
+		player = CreateObject("prefabs/PlayerModel");
+		player.transform.position = new Vector2(0, 0);
 	}
 	
 	// Update is called once per frame
