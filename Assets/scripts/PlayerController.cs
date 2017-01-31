@@ -36,12 +36,12 @@ public class PlayerController : MonoBehaviour {
 		else horizSpeed = 0f;
 		
 		if(jump == 1) vertiSpeed = 0.3f;
-		else if (jump == 0) vertiSpeed = 0f;
+		else if(jump == 0) vertiSpeed = 0f;
 		
-		left = transform.position.x - 0.49f + horizSpeed;
-		right = transform.position.x + 0.49f + horizSpeed;
-		up = transform.position.y + 0.99f + vertiSpeed;
-		down = transform.position.y - 1.0f + vertiSpeed;
+		left = transform.position.x - 0.45f + horizSpeed;
+		right = transform.position.x + 0.45f + horizSpeed;
+		up = transform.position.y + 0.95f + vertiSpeed;
+		down = transform.position.y - 1f + vertiSpeed;
 		int maxHori = Mathf.FloorToInt(right); //these are the coordinates of the squares (in array) that the box intersects)
 		int minHori = Mathf.FloorToInt(left);
 		int maxVerti = Mathf.FloorToInt(up);
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour {
 		if(move == 1) {
 			for(int i = 0; i < rowsIntersected; i++) {
 				if(tileMap[minVerti + i, maxHori].tag == "Obstacle") {
-					maxMove = Mathf.Min(maxMove, (tileMap[minVerti + i, maxHori].transform.position.x - 0.5f) - (transform.position.x + 0.49f));
+					maxMove = Mathf.Min(maxMove, (tileMap[minVerti + i, maxHori].transform.position.x - 0.5f) - (transform.position.x + 0.45f));
 				}
 			}
 			transform.position += new Vector3(maxMove, 0, 0);	
@@ -63,38 +63,17 @@ public class PlayerController : MonoBehaviour {
 		else if (move == -1) {
 			for(int i = 0; i < rowsIntersected; i++) {
 				if(tileMap[minVerti + i, minHori].tag == "Obstacle") {
-					maxMove = Mathf.Max(maxMove, (tileMap[minVerti + i, minHori].transform.position.x + 0.5f) - (transform.position.x - 0.49f));
+					maxMove = Mathf.Max(maxMove, (tileMap[minVerti + i, minHori].transform.position.x + 0.5f) - (transform.position.x - 0.45f));
 				}
 			}
 			transform.position += new Vector3(maxMove, 0, 0);
 		}
 		
 		//handle vertical movement: apply jump impulse if applicable, then check for obstruction/move, then modify vertiSpeed according to gravity
-		
-		maxMove = vertiSpeed;
-		if(vertiSpeed > 0) {
-			jump = -1;
-			for(int i = 0; i < colsIntersected; i++) {
-				if(tileMap[maxVerti, minHori + i].tag == "Obstacle") {
-					maxMove = Mathf.Min(maxMove, (tileMap[maxVerti, minHori + i].transform.position.y - 0.5f) - (transform.position.y + 0.99f));
-				}
-			}
-			transform.position += new Vector3(0, maxMove, 0);
-			if (maxMove <= 0) jump = 0;
-		}
-		else {
-			jump = -1;
-			for(int i = 0; i < colsIntersected; i++) {
-				if(tileMap[minVerti, minHori + i].tag == "Obstacle") {
-					maxMove = Mathf.Max(maxMove, (tileMap[minVerti, minHori + i].transform.position.y + 0.5f) - (transform.position.y - 1.0f));
-				}
-			}
-			transform.position += new Vector3(0, maxMove, 0);
-			if (maxMove >= 0) jump = 0;
-		}
+	
 		
 		
-		vertiSpeed += gravity * 0.01f;
+
 		
 	}
 }
