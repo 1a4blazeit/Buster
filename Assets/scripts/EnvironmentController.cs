@@ -13,7 +13,7 @@ public class EnvironmentController : MonoBehaviour {
 		
 		for(int i = 0; i < 10;  i++) {
 			for(int j = 0; j < 15; j++) {
-				if(j == 0 || j == 14 || i == 0 || i == 9){
+				if((j == 0 || j == 14 || i == 0 || i == 9) || (j == 3 && i == 3)){
 					tileArray[i, j] = GameObject.Find("MainModel").GetComponent<MainController>().CreateObject("prefabs/Tile");
 					tileArray[i, j].transform.position = new Vector3((0.5f + j), (0.5f + i), 0);
 				}
