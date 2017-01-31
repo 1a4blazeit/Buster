@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 	int move;
-	static float gravity = 9.81f;
+	static float gravity = -9.81f;
 	static float speed = 0.15f; //horizontal movement per fixedUpdate tick
 	float left, right, up, down; //bounding box edge coordinate intersecctions
 
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour {
 		
 		if(move == 1) {
 			if(GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray[maxVerti, maxHori].tag != "Obstacle")
-				gameObject.transform.position += new Vector3(speed, 0, 0);
+				transform.position += new Vector3(speed, 0, 0);
 			else { //put player against the wall
 				float maxMove = (GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray[maxVerti, maxHori].transform.position.x -0.5f) - (transform.position.x + 0.5f);
 				transform.position += new Vector3(maxMove, 0, 0);
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		else if (move == -1) {
 			if(GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray[maxVerti, minHori].tag != "Obstacle")
-				gameObject.transform.position -= new Vector3(speed, 0, 0);
+				transform.position -= new Vector3(speed, 0, 0);
 			else { //put player against the wall
 				float maxMove = (GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray[maxVerti, minHori].transform.position.x +0.5f) - (transform.position.x - 0.5f);
 				transform.position += new Vector3(maxMove, 0, 0);
