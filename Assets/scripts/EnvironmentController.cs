@@ -9,11 +9,14 @@ public class EnvironmentController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		tileArray = new GameObject[10,15]; //[X,Y] is X rows and Y columns
 		
-		for(int i = 0; i < 10;  i++) {
-			for(int j = 0; j < 15; j++) {
-				if((j == 0 || j == 14 || i == 0 || i == 9) || (j == 3 && i == 3)){
+		int arrayRows = 10;
+		int arrayCols = 13;
+		tileArray = new GameObject[arrayRows,arrayCols]; //[X,Y] is X rows and Y columns
+		
+		for(int i = 0; i < arrayRows;  i++) {
+			for(int j = 0; j < arrayCols; j++) {
+				if(j == 0 || j == arrayCols - 1 || i == 0 || i == arrayRows - 1){
 					tileArray[i, j] = GameObject.Find("MainModel").GetComponent<MainController>().CreateObject("prefabs/Tile");
 					tileArray[i, j].transform.position = new Vector3((0.5f + j), (0.5f + i), 0);
 				}

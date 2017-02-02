@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 	int move; //-1 is moving left, 0 is no horizontal movement, 1 is moving right
-	int jump; //0 is grounded, 1 is jumping on next FixedUpdate, -1 is in mid-air
+	int jump; //1+ queues up a jump, 0 is midair, -1 is grounded
 	static float gravity = -9.81f;
 	static float speed = 0.15f;
 	float horizSpeed; //horizontal movement per fixedUpdate tick
@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		move = 0; 
-		jump = 0;
+		jump = -1;
 		horizSpeed = 0;
 		vertiSpeed = 0;
 	}
@@ -28,8 +28,6 @@ public class PlayerController : MonoBehaviour {
 		if(Input.GetKey("up")) jump = 1;
 		else if(Input.GetKey("down")) jump = -1;
 		else jump = 0;
-		
-		//if(Input.GetKeyDown("z") && jump == 0) jump = 1;
 	}
 	
 	// FixedUpdate is called more often than Update and on a more consistent clock
@@ -43,26 +41,33 @@ public class PlayerController : MonoBehaviour {
 		else if(jump == -1) vertiSpeed = -speed;
 		else vertiSpeed = 0f;
 		
-		/*if(jump == 1) vertiSpeed = 0.3f;
-		else if(jump == 0) vertiSpeed = 0f;*/
 		
+		//define the hitboxes
 		left = transform.position.x - 0.45f;
 		right = transform.position.x + 0.45f;
 		up = transform.position.y + 0.95f;
-		down = transform.position.y - 1f;
-		int maxHori = Mathf.FloorToInt(right); //these are the coordinates of the squares (in array) that the box intersects)
+		down = transform.position.y - 1.0f;
+		
+		//find the array rows that correspond to hitbox edges
+		int maxHori = Mathf.FloorToInt(right);
 		int minHori = Mathf.FloorToInt(left);
 		int maxVerti = Mathf.FloorToInt(up);
 		int minVerti = Mathf.FloorToInt(down);
+		
+		//figure out how many rows/cols will have to be iterated through in future checks
 		int rowsIntersected = maxVerti - minVerti + 1;
 		int colsIntersected = maxHori - minHori + 1;
-		GameObject[,] tileMap = GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray;
 		
-		//handle horizontal movement: 1 means right key is being held, -1 means left is, 0 means neither
+		GameObject[,] tileMap = GameObject.Find("EnvironmentModel").GetComponent<EnvironmentController>().tileArray;
+
+		
+		//first check that the moved-towards edge isn't inside an obstacle
+		//if it is, cannot move further in that direction
+		//if it isn't, move up until in contact or the move speed
 		float maxMove = horizSpeed;
 		if(move == 1) {
 			for(int i = 0; i < rowsIntersected; i++) {
-				if(tileMap[minVerti + i, maxHori].tag == "Obstacle") { //if bounding box overlaps with obstacle, can't move further!
+				if(tileMap[minVerti + i, maxHori].tag == "Obstacle") {
 					maxMove = 0;
 				}
 				else if(tileMap[minVerti + i, maxHori + 1].tag == "Obstacle") {
@@ -82,6 +87,8 @@ public class PlayerController : MonoBehaviour {
 			}
 			transform.position += new Vector3(maxMove, 0, 0);
 		}
+		
+		//check grounded/jump status, and if appropriate, set new vertiSpeed
 		
 		maxMove = vertiSpeed;
 		if(jump == 1) {
@@ -106,12 +113,5 @@ public class PlayerController : MonoBehaviour {
 			}
 			transform.position += new Vector3(0, maxMove, 0);
 		}
-		
-		
-	
-		
-		
-
-		
 	}
 }
