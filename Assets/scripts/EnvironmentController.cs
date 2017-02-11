@@ -16,7 +16,7 @@ public class EnvironmentController : MonoBehaviour {
 		
 		for(int i = 0; i < arrayRows;  i++) {
 			for(int j = 0; j < arrayCols; j++) {
-				if(j == 0 || j == arrayCols - 1 || i == 0 || i == arrayRows - 1){
+				if(j == 0 || j == arrayCols - 1 || i == 0 || i == arrayRows - 1 || (i == 3 && j == 4)){
 					tileArray[i, j] = GameObject.Find("MainModel").GetComponent<MainController>().CreateObject("prefabs/Tile");
 					tileArray[i, j].transform.position = new Vector3((0.5f + j), (0.5f + i), 0);
 				}
